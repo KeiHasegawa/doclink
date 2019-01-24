@@ -1,0 +1,27 @@
+#! /bin/csh -vf
+
+hcpp.exe -D__CYGWIN__ -o sample.i sample.txt -L sample.j -W 0 -H \
+-D__builtin_va_list='char*' \
+-D__inline__=inline \
+-D__extension__= \
+-D__asm__=asm \
+-Id:/cygwin64/usr/include \
+-Id:/cygwin64/lib/gcc/x86_64-pc-cygwin/7.3.0/include || exit 1
+hcc1.exe --generator d:/home/khasegawa/lang/bin/docgen.dll sample.i \
+-o sample.x || exit 1
+
+hcpp.exe -o sample2.i -L sample2.j sample2.txt -W 0 -H \
+-D__builtin_va_list='char*' \
+-D__inline__=inline \
+-D__extension__= \
+-D__asm__=asm \
+-Id:/cygwin64/usr/include \
+-Id:/cygwin64/lib/gcc/x86_64-pc-cygwin/7.3.0/include || exit 1
+hcc1.exe --generator d:/home/khasegawa/lang/bin/docgen.dll sample2.i \
+-o sample2.x || exit 1
+
+./doclink.exe -o output.txt sample2.j sample.j sample2.x sample.x \
+--exclude-dir d:/cygwin64/usr/include \
+--exclude-dir d:/cygwin64/lib/gcc/x86_64-pc-cygwin/7.3.0/include \
+--output-nodef || exit 1
+platex doc.tex

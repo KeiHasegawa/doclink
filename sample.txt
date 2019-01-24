@@ -1,0 +1,6 @@
+#define FOO(a, b, c)  ((a) | (b) || (c))
+
+int f()
+{
+  return FOO(1, 2, 3);
+}
