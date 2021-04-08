@@ -13,7 +13,7 @@ extern "C" int isatty(int);
 #include "doclink.h"
 %}
 
-identifier  {nondigit}({nondigit}|{digit})*
+identifier  {nondigit}({nondigit}|{digit}|:)*
 nondigit    [_a-zA-Z]
 digit       [0-9]
 
