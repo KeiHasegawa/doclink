@@ -1,5 +1,4 @@
 %{
-#pragma warning (disable : 4065)
 int doclink_lex();
 #include "doclink.h"
 %}
@@ -38,30 +37,52 @@ macro_stmt
 tag_stmt
   : TAG_KW DECL_KW IDENTIFIER STRING NUMBER ';'
     { doclink::tag::decl($3,$4,$5); }
+  | TAG_KW DECL_KW STRING  STRING NUMBER ';'
+    { doclink::tag::decl($3,$4,$5); }
   ;
 
 var_stmt
-  : VAR_KW DEF_KW  IDENTIFIER STRING NUMBER ';'
+  : VAR_KW DEF_KW IDENTIFIER STRING NUMBER ';'
+    { doclink::var::def($3,$4,$5); }
+  | VAR_KW DEF_KW STRING STRING NUMBER ';'
     { doclink::var::def($3,$4,$5); }
   | VAR_KW DECL_KW IDENTIFIER STRING NUMBER ';'
     { doclink::var::decl($3,$4,$5); }
-  | VAR_KW DEF_KW  IDENTIFIER STRING NUMBER
+  | VAR_KW DECL_KW STRING STRING NUMBER ';'
+    { doclink::var::decl($3,$4,$5); }
+  | VAR_KW DEF_KW IDENTIFIER STRING NUMBER
+    { doclink::var::def($3,$4,$5); } '{' ref_stmts '}'
+  | VAR_KW DEF_KW STRING STRING NUMBER
     { doclink::var::def($3,$4,$5); } '{' ref_stmts '}'
   ;
 
 func_stmt
   : FUNC_KW DECL_KW IDENTIFIER STRING NUMBER ';'
     { doclink::func::decl($3,$4,$5); }
+  | FUNC_KW DECL_KW STRING STRING NUMBER ';'
+    { doclink::func::decl($3,$4,$5); }
   | FUNC_KW DEF_KW IDENTIFIER STRING NUMBER '{'
     { doclink::func::def($3,$4,$5); } graph '}'
   | FUNC_KW DEF_KW IDENTIFIER STRING NUMBER '{'
+    { doclink::func::def($3,$4,$5); } '}'
+  | FUNC_KW DEF_KW STRING STRING NUMBER '{'
+    { doclink::func::def($3,$4,$5); } graph '}'
+  | FUNC_KW DEF_KW STRING STRING NUMBER '{'
+    { doclink::func::def($3,$4,$5); } '}'
+  | FUNC_KW DEF_KW IDENTIFIER STRING NUMBER '{'
+    { doclink::func::def($3,$4,$5); } ref_stmts graph '}'
+  | FUNC_KW DEF_KW STRING STRING NUMBER '{'
     { doclink::func::def($3,$4,$5); } ref_stmts graph '}'
   ;
 
 type_stmt
   : TYPE_KW DEF_KW IDENTIFIER STRING NUMBER ';'
     { doclink::type::def($3,$4,$5); }
+  | TYPE_KW DEF_KW STRING STRING NUMBER ';'
+    { doclink::type::def($3,$4,$5); }
   | TYPE_KW REF_KW IDENTIFIER STRING NUMBER ';'
+    { doclink::type::ref($3,$4,$5); }
+  | TYPE_KW REF_KW STRING STRING NUMBER ';'
     { doclink::type::ref($3,$4,$5); }
   ;
 
@@ -71,16 +92,22 @@ ref_stmts
   ;
 
 ref_stmt
-  : REF_KW TAG_KW  IDENTIFIER STRING NUMBER ';'
+  : REF_KW TAG_KW IDENTIFIER STRING NUMBER ';'
     { doclink::tag::ref($3,$4,$5); }
-  | REF_KW VAR_KW  IDENTIFIER STRING NUMBER ';'
+  | REF_KW TAG_KW STRING STRING NUMBER ';'
+    { doclink::tag::ref($3,$4,$5); }
+  | REF_KW VAR_KW IDENTIFIER STRING NUMBER ';'
+    { doclink::var::ref($3,$4,$5); }
+  | REF_KW VAR_KW STRING STRING NUMBER ';'
     { doclink::var::ref($3,$4,$5); }
   | REF_KW FUNC_KW IDENTIFIER STRING NUMBER ';'
+    { doclink::func::ref($3,$4,$5); }
+  | REF_KW FUNC_KW STRING STRING NUMBER ';'
     { doclink::func::ref($3,$4,$5); }
   ;
 
 graph
-  : GRAPH_KW '{'             '}'
+  : GRAPH_KW '{' '}'
   | GRAPH_KW '{' graph_stmts '}'
   ;
 

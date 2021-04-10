@@ -54,9 +54,14 @@ namespace doclink {
   } // end of namespace macro
   namespace tag {
     vector<tag_t> tags;    
-    void decl(char* name, char* fn, int line)
+    void decl(char* spec, char* fn, int line)
     {
-      sweeper sweeper(name, fn);
+      sweeper sweeper(spec, fn);
+      string name = spec;
+      if (name[0] == '"') {
+	assert(name[name.length()-1] == '"');
+	name = name.substr(1,name.length()-2);
+      }
       string path = fn;
       assert(path[0] == '"' && path[path.length()-1] == '"');
       path = path.substr(1,path.length()-2);
@@ -68,9 +73,14 @@ namespace doclink {
       if (p == end(tags))
         tags.push_back(y);
     }
-    void ref(char* name, char* fn, int line)
+    void ref(char* spec, char* fn, int line)
     {
-      sweeper sweeper(name, fn);
+      sweeper sweeper(spec, fn);
+      string name = spec;
+      if (name[0] == '"') {
+	assert(name[name.length()-1] == '"');
+	name = name.substr(1,name.length()-2);
+      }
       string path = fn;
       assert(path[0] == '"' && path[path.length()-1] == '"');
       path = path.substr(1,path.length()-2);
@@ -85,13 +95,18 @@ namespace doclink {
   } // end of namespace tag
   namespace var {
     vector<var_t> vars;
-    void def(char* name, char* fn, int line)
+    void def(char* spec, char* fn, int line)
     {
-      sweeper sweeper(name, fn);
+      sweeper sweeper(spec, fn);
+      string name = spec;
+      if (name[0] == '"') {
+	assert(name[name.length()-1] == '"');
+	name = name.substr(1, name.length()-2);
+      }
       curr_sym = name;
       string path = fn;
       assert(path[0] == '"' && path[path.length()-1] == '"');
-      path = path.substr(1,path.length()-2);
+      path = path.substr(1, path.length()-2);
       appear::add(path);
       typedef vector<var_t>::reverse_iterator IT;
       IT p = find_if(rbegin(vars), rend(vars),
@@ -105,9 +120,14 @@ namespace doclink {
       var_t y(name, path, line);
       vars.push_back(y);
     }
-    void decl(char* name, char* fn, int line)
+    void decl(char* spec, char* fn, int line)
     {
-      sweeper sweeper(name, fn);
+      sweeper sweeper(spec, fn);
+      string name = spec;
+      if (name[0] == '"') {
+	assert(name[name.length()-1] == '"');
+	name = name.substr(1, name.length()-2);
+      }
       string path = fn;
       assert(path[0] == '"' && path[path.length()-1] == '"');
       path = path.substr(1,path.length()-2);
@@ -123,9 +143,14 @@ namespace doclink {
       y.m_decls.push_back(file_t(path, line));
       vars.push_back(y);
     }
-    void ref(char* name, char* fn, int line)
+    void ref(char* spec, char* fn, int line)
     {
-      sweeper sweeper(name, fn);
+      sweeper sweeper(spec, fn);
+      string name = spec;
+      if (name[0] == '"') {
+	assert(name[name.length()-1] == '"');
+	name = name.substr(1, name.length()-2);
+      }
       string path = fn;
       assert(path[0] == '"' && path[path.length()-1] == '"');
       path = path.substr(1,path.length()-2);
@@ -140,9 +165,14 @@ namespace doclink {
   } // end of namespace var
   namespace func {
     vector<func_t> funcs;
-    void def(char* name, char* fn, int line)
+    void def(char* spec, char* fn, int line)
     {
-      sweeper sweeper(name, fn);
+      sweeper sweeper(spec, fn);
+      string name = spec;
+      if (name[0] == '"') {
+	assert(name[name.length()-1] == '"');
+	name = name.substr(1, name.length()-2);
+      }
       curr_sym = name;
       string path = fn;
       assert(path[0] == '"' && path[path.length()-1] == '"');
@@ -160,9 +190,14 @@ namespace doclink {
       func_t y(name, path, line);
       funcs.push_back(y);
     }
-    void decl(char* name, char* fn, int line)
+    void decl(char* spec, char* fn, int line)
     {
-      sweeper sweeper(name, fn);
+      sweeper sweeper(spec, fn);
+      string name = spec;
+      if (name[0] == '"') {
+	assert(name[name.length()-1] == '"');
+	name = name.substr(1, name.length()-2);
+      }
       string path = fn;
       assert(path[0] == '"' && path[path.length()-1] == '"');
       path = path.substr(1,path.length()-2);
@@ -178,9 +213,14 @@ namespace doclink {
       y.m_decls.push_back(file_t(path, line));
       funcs.push_back(y);
     }
-    void ref(char* name, char* fn, int line)
+    void ref(char* spec, char* fn, int line)
     {
-      sweeper sweeper(name, fn);
+      sweeper sweeper(spec, fn);
+      string name = spec;
+      if (name[0] == '"') {
+	assert(name[name.length()-1] == '"');
+	name = name.substr(1, name.length()-2);
+      }
       string path = fn;
       assert(path[0] == '"' && path[path.length()-1] == '"');
       path = path.substr(1,path.length()-2);
@@ -226,9 +266,14 @@ namespace doclink {
   } // end of namespace func
   namespace type {
     vector<type_t> types;
-    void def(char* name, char* fn, int line)
+    void def(char* spec, char* fn, int line)
     {
-      sweeper sweeper(name, fn);
+      sweeper sweeper(spec, fn);
+      string name = spec;
+      if (name[0] == '"') {
+	assert(name[name.length()-1] == '"');
+	name = name.substr(1, name.length()-2);
+      }
       string path = fn;
       assert(path[0] == '"' && path[path.length()-1] == '"');
       path = path.substr(1,path.length()-2);
@@ -246,9 +291,14 @@ namespace doclink {
       type_t y(name, path, line);
       types.push_back(y);
     }
-    void ref(char* name, char* fn, int line)
+    void ref(char* spec, char* fn, int line)
     {
-      sweeper sweeper(name, fn);
+      sweeper sweeper(spec, fn);
+      string name = spec;
+      if (name[0] == '"') {
+	assert(name[name.length()-1] == '"');
+	name = name.substr(1, name.length()-2);
+      }
       string path = fn;
       assert(path[0] == '"' && path[path.length()-1] == '"');
       path = path.substr(1,path.length()-2);
