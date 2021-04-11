@@ -185,6 +185,7 @@ namespace doclink {
         if (p->m_def.second)
           error::multi_def("func", name, *p);
         p->m_def = file_t(path, line);
+	p->m_input = file_t(curr_file, lineno);
         return;
       }
       func_t y(name, path, line);
