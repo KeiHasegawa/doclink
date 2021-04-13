@@ -61,18 +61,17 @@ func_stmt
     { doclink::func::decl($3,$4,$5); }
   | FUNC_KW DECL_KW STRING STRING NUMBER ';'
     { doclink::func::decl($3,$4,$5); }
-  | FUNC_KW DEF_KW IDENTIFIER STRING NUMBER '{'
-    { doclink::func::def($3,$4,$5); } graph '}'
-  | FUNC_KW DEF_KW IDENTIFIER STRING NUMBER '{'
-    { doclink::func::def($3,$4,$5); } '}'
-  | FUNC_KW DEF_KW STRING STRING NUMBER '{'
-    { doclink::func::def($3,$4,$5); } graph '}'
-  | FUNC_KW DEF_KW STRING STRING NUMBER '{'
-    { doclink::func::def($3,$4,$5); } '}'
-  | FUNC_KW DEF_KW IDENTIFIER STRING NUMBER '{'
-    { doclink::func::def($3,$4,$5); } ref_stmts graph '}'
-  | FUNC_KW DEF_KW STRING STRING NUMBER '{'
-    { doclink::func::def($3,$4,$5); } ref_stmts graph '}'
+  | func_def_header '{' graph '}'
+  | func_def_header '{' '}'
+  | func_def_header '{' ref_stmts graph '}'
+  | func_def_header '{' ref_stmts '}'
+  ;
+
+func_def_header
+  : FUNC_KW DEF_KW IDENTIFIER STRING NUMBER
+    { doclink::func::def($3,$4,$5); }
+  | FUNC_KW DEF_KW STRING STRING NUMBER
+    { doclink::func::def($3,$4,$5); }
   ;
 
 type_stmt
